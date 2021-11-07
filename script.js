@@ -1,7 +1,9 @@
 'use strict';
 
-let secretNumber = Math.trunc(Math.random() * 20) + 1;
-let score = 20;
+const minValue = 1;
+const maxValue = 20;
+let secretNumber = Math.trunc(Math.random() * maxValue) + 1;
+let score = maxValue;
 let highScore = 0;
 
 const displayMessage = function (message) {
@@ -19,8 +21,8 @@ const checkNumber = function () {
         displayMessage('No number! ⛔');
 
         // check for value within the game range
-    } else if (guess < 1 || guess > 20) {
-        displayMessage('Please enter a number between 1 and 20');
+    } else if (guess < minValue || guess > maxValue) {
+        displayMessage(`Please enter a number between ${minValue} and ${maxValue}`);
 
         // win
     } else if (guess === secretNumber) {
@@ -44,26 +46,26 @@ const checkNumber = function () {
             displayScore(0);
         }
     }
-
-    // resetting the 'again' btn
-    document.querySelector('.again').addEventListener('click', function () {
-        score = 20;
-        secretNumber = Math.trunc(Math.random() * 20) + 1;
-        displayScore(score);
-        document.querySelector('body').style.backgroundColor = '#222';
-        document.querySelector('.number').style.width = '15rem';
-        document.querySelector('.number').textContent = '?';
-        displayMessage('Start guessing...');
-        document.querySelector('.guess').value = ''; // value. Not textContent
-    });
 }
+
+// resetting the 'again' btn
+document.querySelector('.again').addEventListener('click', function () {
+    score = maxValue;
+    secretNumber = Math.trunc(Math.random() * maxValue) + 1;
+    displayScore(score);
+    document.querySelector('body').style.backgroundColor = '#222';
+    document.querySelector('.number').style.width = '15rem';
+    document.querySelector('.number').textContent = '?';
+    displayMessage('Start guessing...');
+    document.querySelector('.guess').value = ''; // value. Not textContent
+});
 
 // check button click and "Enter" key
 document.querySelector('.check').addEventListener('click', checkNumber);
-
-window.addEventListener('keydown', (e) => {
-    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+const enterCheck = document.querySelector('.guess');
+enterCheck.onkeydown = function (keydown) {
+    if (keydown.key === 'Enter') {
         checkNumber();
     }
-});
+}
 
